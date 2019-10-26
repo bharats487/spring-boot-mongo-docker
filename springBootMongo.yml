@@ -1,35 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: nginx-deploy
   labels:
-    name: springboot
-  name: spring-controller
+    app: nginx-app
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
-        name: springboot
+        app: nginx-app
     spec:
       containers:
-      - image: bharats487/spring-boot-mongo
-        name: springboot
+      - name: nginx-container
+        image: nginx:1.7.9
         ports:
-        - name: springboot
-          containerPort: 8989   
----
-# Node Port Service
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    name: springboot
-  name: springboot
-spec:
-  type: NodePort
-  ports:
-    - port: 8989
-      targetPort: 8989
+        - containerPort: 80
   selector:
-    name: springboot
-
+    matchLabels:
+      app: nginx-app
